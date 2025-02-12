@@ -1,0 +1,49 @@
+# Ignore build directories
+/build/
+/bin/
+/obj/
+/out/
+
+# Ignore compiled object files
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+*.out
+
+# Ignore CUDA-specific intermediate files
+*.ptx
+*.cubin
+
+# Ignore Visual Studio-specific files (if applicable)
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+ipch/
+*.suo
+*.user
+*.ncb
+*.log
+
+# Ignore temporary files and backups
+*~
+*.tmp
+*.swp
+
+# Ignore dependency management tools (e.g., CMake)
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+# Ignore IDE-specific settings (e.g., CLion, JetBrains)
+.idea/
+.vscode/
+
+# Ignore other common generated files and logs
+*.log
+*.cache
+
+
