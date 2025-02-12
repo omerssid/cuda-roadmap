@@ -8,7 +8,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-#define N 100000
+#define N 10000000
 
 
 __global__ void vecAdd(float* A, float *B, float *C, int n)
@@ -60,6 +60,38 @@ int main ()
         numBlocks → Number of blocks per grid
         numThreads → Number of threads per block
     */
+    auto start = std::chrono::high_resolution_clock::now();
+    vecAdd<<<gridSize, blockSize>>>(d_A, d_B, d_C, N);
+    // Ensure all device threads finish execution
+    cudaDeviceSynchronize();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> gpu_time = end - start;
+
+    // 3. Copy result back to host
+    cudaMemcpy(h_C, d_C, N * sizeof(float), cudaMemcpyDeviceToHost);
+
+    // 4. Free device memory
+    cudaFree(d_A);
+    cudaFree(d_B);
+    cudaFree(d_C);
+
+
+    // Run CPU version for comparison
+    start = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < N; i++) {
+        h_C[i] = h_A[i] + h_B[i];
+    }
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> cpu_time = end - start;
+
+    // Print performance results
+    std::cout << "GPU Time: " << gpu_time.count() * 1000 << " ms\n";
+    std::cout << "CPU Time: " << cpu_time.count() * 1000 << " ms\n";
+
+    // Free memory
+    delete[] h_A;
+    delete[] h_B;
+    delete[] h_C; 
 
     return 0;
 }
